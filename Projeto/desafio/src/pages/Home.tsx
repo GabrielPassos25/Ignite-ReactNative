@@ -1,6 +1,6 @@
 //Imports
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, AsyncStorage } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 
 //Pages
 import { Header } from '../components/Header';
@@ -17,8 +17,7 @@ interface Task {
 export function Home() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [mode, setMode] = useState('Light');
-
-    async function handleAddTask(newTaskTitle: string) {
+    function handleAddTask(newTaskTitle: string) {
         const data = {
             id: new Date().getTime(),
             title: newTaskTitle,
@@ -26,7 +25,6 @@ export function Home() {
         } as Task;
         setTasks(oldstate => [...oldstate, data]);
     }
-
     function handleMarkTaskAsDone(id: number) {
         tasks[id] = {
             id: tasks[id].id,
@@ -36,7 +34,7 @@ export function Home() {
         setTasks(tasks.filter(() => true));
     }
 
-    async function handleRemoveTask(id: number) {
+    function handleRemoveTask(id: number) {
         setTasks(oldState => oldState.filter(task => task.id !== id));
     }
 
@@ -48,7 +46,6 @@ export function Home() {
             setMode('Light')
         }
     }
-
 
     return (
         <View style={styles[`container${mode}`]}>
