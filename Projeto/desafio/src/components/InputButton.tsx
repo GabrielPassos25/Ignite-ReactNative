@@ -11,9 +11,10 @@ import fonts from '../styles/fonts';
 
 interface ButtonInputProps {
     addTask: (task: string) => void;
+    mode: string;
 }
 
-export function InputButton({ addTask }: ButtonInputProps) {
+export function InputButton({ addTask, mode }: ButtonInputProps) {
     const [task, setTask] = useState('');
 
     function handleAddNewTask() {
@@ -26,16 +27,16 @@ export function InputButton({ addTask }: ButtonInputProps) {
     const onChange = (taskValue: string) => setTask(taskValue);
 
     return (
-        <View style={[styles.inputContainer, Platform.OS === 'ios' ? styles.iosShadow : styles.androidShadow]}>
-            <TextInput style={styles.input} placeholder='Adicionar novo todo...' returnKeyType='send' onChangeText={onChange} value={task} />
-            <TouchableOpacity activeOpacity={0.7} style={styles.addButton} onPress={handleAddNewTask}>
+        <View style={[styles[`inputContainer${mode}`], Platform.OS === 'ios' ? styles.iosShadow : styles.androidShadow]}>
+            <TextInput style={styles[`input${mode}`]} placeholder='Adicionar novo todo...' returnKeyType='send' onChangeText={onChange} value={task} placeholderTextColor={mode === 'Light' ? colors.gray : colors.gray_darkMode} />
+            <TouchableOpacity activeOpacity={0.7} style={styles[`addButton${mode}`]} onPress={handleAddNewTask}>
                 <Image source={CheckIcon} />
             </TouchableOpacity>
         </View>
     );
 }
 const styles = StyleSheet.create({
-    inputContainer: {
+    inputContainerLight: {
         backgroundColor: colors.light_gray,
         borderRadius: 5,
         marginTop: -25,
@@ -56,14 +57,52 @@ const styles = StyleSheet.create({
     androidShadow: {
         elevation: 5
     },
-    input: {
+    inputLight: {
         flex: 1,
         paddingLeft: 12,
         borderTopLeftRadius: 5,
         borderBottomLeftRadius: 5,
+        color: colors.black
     },
-    addButton: {
+    addButtonLight: {
         backgroundColor: colors.green,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 16,
+        borderTopRightRadius: 5,
+        borderBottomRightRadius: 5
+    },
+    inputContainerDark: {
+        backgroundColor: colors.light_gray_darkMode,
+        borderRadius: 5,
+        marginTop: -25,
+        marginHorizontal: 40,
+        height: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    iosShadowDark: {
+        shadowColor: colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84
+    },
+    androidShadowDark: {
+        elevation: 5
+    },
+    inputDark: {
+        flex: 1,
+        paddingLeft: 12,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
+        color: colors.white
+    },
+    addButtonDark: {
+        backgroundColor: colors.purple,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',

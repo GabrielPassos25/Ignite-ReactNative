@@ -1,15 +1,12 @@
 //Imports
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, Platform, TouchableOpacity, Image, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, AsyncStorage } from 'react-native';
 
 //Pages
 import { Header } from '../components/Header';
 import { InputButton } from '../components/InputButton';
 import { Card } from '../components/Card';
-
-//Styles
 import colors from '../styles/colors';
-import fonts from '../styles/fonts';
 
 interface Task {
     id: number;
@@ -19,7 +16,9 @@ interface Task {
 
 export function Home() {
     const [tasks, setTasks] = useState<Task[]>([]);
-    function handleAddTask(newTaskTitle: string) {
+    const [mode, setMode] = useState('Light');
+
+    async function handleAddTask(newTaskTitle: string) {
         const data = {
             id: new Date().getTime(),
             title: newTaskTitle,
@@ -37,31 +36,36 @@ export function Home() {
         setTasks(tasks.filter(() => true));
     }
 
-    function handleRemoveTask(id: number) {
+    async function handleRemoveTask(id: number) {
         setTasks(oldState => oldState.filter(task => task.id !== id));
     }
+
+    function handleThemeChange() {
+        if (mode === 'Light') {
+            setMode('Dark');
+        }
+        else {
+            setMode('Light')
+        }
+    }
+
+
     return (
-        <View style={styles.container}>
-            <Header />
-            <InputButton addTask={handleAddTask} />
-            <Text style={styles.title}>
-                Minhas Tasks
-            </Text>
-            <Card tasks={tasks} onPress={handleMarkTaskAsDone} onLongPress={handleRemoveTask} />
+        <View style={styles[`container${mode}`]}>
+            <Header onPress={handleThemeChange} mode={mode} />
+            <InputButton addTask={handleAddTask} mode={mode} />
+            <Card tasks={tasks} mode={mode} onPress={handleMarkTaskAsDone} onLongPress={handleRemoveTask} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    containerLight: {
         flex: 1,
-        paddingBottom: 40
+        backgroundColor: colors.white
     },
-    title: {
-        fontSize: 24,
-        fontFamily: fonts.heading,
-        color: colors.title,
-        paddingHorizontal: 20,
-        marginTop: 40,
+    containerDark: {
+        flex: 1,
+        backgroundColor: colors.black_background
     }
 });

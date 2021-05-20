@@ -1,33 +1,54 @@
 //Imports
-import React from 'react';
-import { View, Text, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 
 //Styles
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-export function Header() {
+interface ChangeTheme {
+    onPress: (mode: string) => void;
+    mode: string;
+}
+
+export function Header({ onPress, mode }: ChangeTheme) {
+
     return (
-        <SafeAreaView style={styles.statusBar}>
-            <View style={styles.header}>
-                <Text style={[styles.textHeader, { fontFamily: fonts.text }]}>to.<Text style={[styles.textHeader, { fontFamily: fonts.heading }]}>do</Text></Text>
+        <SafeAreaView style={styles[`statusBar${mode}`]}>
+            <View style={styles[`header${mode}`]}>
+                <TouchableOpacity onPress={() => onPress(mode)}>
+                    <Text style={[styles[`textHeader${mode}`], { fontFamily: fonts.text }]}>to.<Text style={[styles[`textHeader${mode}`], { fontFamily: fonts.heading }]}>do</Text></Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    statusBar: {
+    statusBarLight: {
         backgroundColor: colors.blue,
     },
-    header: {
+    headerLight: {
         paddingBottom: 44,
         backgroundColor: colors.blue,
         alignItems: 'center',
         justifyContent: 'center'
     },
-    textHeader: {
+    textHeaderLight: {
         fontSize: 24,
         color: colors.white
+    },
+    statusBarDark: {
+        backgroundColor: colors.blue_darkMode,
+    },
+    headerDark: {
+        paddingBottom: 44,
+        backgroundColor: colors.blue_darkMode,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    textHeaderDark: {
+        fontSize: 24,
+        color: colors.gray_darkMode
     }
 });
